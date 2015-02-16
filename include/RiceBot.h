@@ -190,6 +190,8 @@ Ricencoder EncDTLeft;
 Ricencoder EncDTRight;
 Ricencoder EncARMLeft;
 Ricencoder EncARMRight;
+Ricencoder EncARMBottom;
+Ricencoder EncARMTop;
 
 Ricepot PotARMFront;
 Ricepot PotARMLeft;
@@ -201,6 +203,8 @@ Pid PidDTLeft;
 Pid PidDTRight;
 Pid PidARMLeft;
 Pid PidARMRight;
+Pid PidARMBottom;
+Pid PidARMTop;
 Pid PidARMFront;
 
 Motor initMotor(unsigned char port, int reflected);
