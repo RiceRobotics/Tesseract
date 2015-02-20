@@ -57,31 +57,24 @@ void operatorControl() {
 		getJoystickForDriveTrain();
 
 		if(joystickGetDigital(1, 6, JOY_UP)) {
+			PidARMBottom.running = 0;
 //			PidARMLeft.setPoint += 10;
 //			PidARMRight.setPoint += 10;
-//			MOTARMBottomLeft.out = 127;
-//			MOTARMBottomRight.out = 127;
+			MOTARMBottomLeft.out = 127;
+			MOTARMBottomRight.out = 127;
 		}
 		else if(joystickGetDigital(1, 6, JOY_DOWN)) {
+			PidARMBottom.running = 0;
 //			PidARMLeft.setPoint -= 5;
 //			PidARMRight.setPoint -= 5;
-//			MOTARMBottomLeft.out = -127;
-//			MOTARMBottomRight.out = -127;
+			MOTARMBottomLeft.out = -127;
+			MOTARMBottomRight.out = -127;
 		}
 		else {
-//			MOTARMBottomLeft.out = 0;
-//			MOTARMBottomRight.out = 0;
-		}
-		if(joystickGetDigital(1, 8, JOY_UP)) {
-//			PidARMLeft.setPoint = EncARMLeft.adjustedValue;
-//			PidARMRight.setPoint = EncARMRight.adjustedValue;
-//			PidARMFront.setPoint = PotARMFront.value;
-		}
-		if(joystickGetDigital(1, 8, JOY_DOWN))	{
-//			imeReset(IMEARMLEFT);
-//			imeReset(IMEARMRIGHT);
-//			PidARMLeft.setPoint = 0;
-//			PidARMRight.setPoint = 0;
+			if(PidARMBottom.running == 0) {
+				PidARMBottom.setPoint = EncARMBottom.adjustedValue + 60;
+			}
+			PidARMBottom.running = 1;
 		}
 
 		if(joystickGetDigital(1, 7, JOY_UP)) {
@@ -94,12 +87,20 @@ void operatorControl() {
 //			MOTCOL.out = 0;
 		}
 
-//		if(joystickGetDigital(1, 5, JOY_UP)) {
-//			PidARMFront.setPoint += 10;
-//		}
-//		else if(joystickGetDigital(1, 5, JOY_DOWN)) {
-//			PidARMFront.setPoint -= 10;
-//		}
+		if(joystickGetDigital(1, 5, JOY_UP)) {
+			PidARMTop.running = 0;
+			MOTARMBack.out = 127;
+		}
+		else if(joystickGetDigital(1, 5, JOY_DOWN)) {
+			PidARMTop.running = 0;
+			MOTARMBack.out = -127;
+		}
+		else {
+			if(PidARMTop.running == 0) {
+				PidARMTop.setPoint = EncARMTop.adjustedValue + 60;
+			}
+			PidARMTop.running = 1;
+		}
 		delay(20);
 	}
 }

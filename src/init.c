@@ -79,11 +79,11 @@ void initialize() {
 
 		MOTCOL = initMotor(5, 1);
 
-		EncDTLeft = initRicencoder(627.2, 1, 1, 0, 0, NULL, false);
+		EncDTLeft = initRicencoder(627.2, 1, 1, 1, 0, NULL, false);
 		EncDTRight = initRicencoder(627.2, 1, 1, 0, 0, NULL, true);
 
-		EncARMBottom = initRicencoder(627.2, 1, 1, 0, 0, NULL, false);
-		EncARMTop = initRicencoder(627.2, 1, 1, 0, 0, NULL, true);
+		EncARMBottom = initRicencoder(627.2, 1, 1, 2, 0, NULL, false);
+		EncARMTop = initRicencoder(627.2, 1, 1, 3, 0, NULL, true);
 		PotARMFront = initRicepot(1);
 
 		gyro = initRicegyro(2, 196);
@@ -130,9 +130,9 @@ void initialize() {
 			updateRicencoder(&EncARMRight);
 			updateRicencoder(&EncDTRight);
 			updateRicencoder(&EncARMBottom);
-			updateRicencode(&EncARMTop);
+			updateRicencoder(&EncARMTop);
 
-			updateRicegyro(gyro);
+			updateRicegyro(&gyro);
 
 			delay(10);
 		}
