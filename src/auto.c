@@ -49,4 +49,41 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
+	long startTime = millis();
+	PidARMBottom->running = 0;
+	PidARMTop->running = 0;
+	//Claw
+	while (millis() < startTime + 250) {
+		printf("CLAW Start: %d, millis: %d, Diff: %d\n\r", startTime, millis(), millis()-startTime);
+		MOTCLAW->out = -127;
+		delay(20);
+	}
+	MOTCLAW->out = 0;
+	//Upper Arm
+	startTime = millis();
+	while (millis() < startTime + 700) {
+		MOTARMTop->out = 127;
+		delay(20);
+	}
+	PidARMTop->setPoint = EncARMTop->adjustedValue + 60;
+	PidARMTop->running = 1;
+	//Lower Arm
+	startTime = millis();
+	while (millis() < startTime + 1250) {
+		MOTARMBottomLeft->out = 60;
+		MOTARMBottomRight->out = 60;
+	}
+	PidARMBottom->setPoint = EncARMBottom->adjustedValue + 60;
+	PidARMBottom->running = 1;
+	//Upper Arm
+	PidARMTop->running = 0;
+	startTime = millis();
+	while (millis() < startTime + 500) {
+		MOTARMTop->out = -127;
+		delay(20);
+	}
+	PidARMTop->setPoint = EncARMTop->adjustedValue + 60;
+	PidARMTop->running = 1;
+
+	autonomousTask(AUTODRIVETIME, NULL, 127, 750);
 }

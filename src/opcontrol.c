@@ -53,54 +53,58 @@
  */
 void operatorControl() {
 
+	PidARMTop->setPoint = EncARMTop->adjustedValue + 60;
+
 	while (1) {
 		getJoystickForDriveTrain();
 
+		if(abs(joystickGetAnalog(1, 2)) > 5) {
+			PidARMBottom->running = 0;
+			MOTARMBottomLeft->out = joystickGetAnalog(1, 2);
+			MOTARMBottomRight->out = joystickGetAnalog(1, 2);
+		}
+		else {
+			if(PidARMBottom->running == 0) {
+				PidARMBottom->setPoint = EncARMBottom->adjustedValue + 60;
+			}
+			PidARMBottom->running = 1;
+		}
+
 		if(joystickGetDigital(1, 6, JOY_UP)) {
-			PidARMBottom.running = 0;
-//			PidARMLeft.setPoint += 10;
-//			PidARMRight.setPoint += 10;
-			MOTARMBottomLeft.out = 127;
-			MOTARMBottomRight.out = 127;
+			PidARMTop->running = 0;
+			MOTARMTop->out = 127;
 		}
 		else if(joystickGetDigital(1, 6, JOY_DOWN)) {
-			PidARMBottom.running = 0;
-//			PidARMLeft.setPoint -= 5;
-//			PidARMRight.setPoint -= 5;
-			MOTARMBottomLeft.out = -127;
-			MOTARMBottomRight.out = -127;
+			PidARMTop->running = 0;
+			MOTARMTop->out = -63;
 		}
 		else {
-			if(PidARMBottom.running == 0) {
-				PidARMBottom.setPoint = EncARMBottom.adjustedValue + 60;
+			if(PidARMTop->running == 0) {
+				PidARMTop->setPoint = EncARMTop->adjustedValue + 60;
 			}
-			PidARMBottom.running = 1;
+			PidARMTop->running = 1;
 		}
-
-		if(joystickGetDigital(1, 7, JOY_UP)) {
-//			MOTCOL.out = 127;
-		}
-		else if(joystickGetDigital(1, 7, JOY_DOWN)) {
-//			MOTCOL.out = -127;
-		}
-		else {
-//			MOTCOL.out = 0;
-		}
-
 		if(joystickGetDigital(1, 5, JOY_UP)) {
-			PidARMTop.running = 0;
-			MOTARMBack.out = 127;
+			MOTCLAW->out = 127;
 		}
 		else if(joystickGetDigital(1, 5, JOY_DOWN)) {
-			PidARMTop.running = 0;
-			MOTARMBack.out = -127;
+			MOTCLAW->out = -127;
 		}
 		else {
-			if(PidARMTop.running == 0) {
-				PidARMTop.setPoint = EncARMTop.adjustedValue + 60;
-			}
-			PidARMTop.running = 1;
+			MOTCLAW->out = 0;
 		}
+
+		if(joystickGetDigital(1, 8, JOY_DOWN)) {
+			imeReset(EncARMBottom->imeAddress);
+			imeReset(EncARMTop->imeAddress);
+			updateRicencoder(EncARMBottom);
+			updateRicencoder(EncARMTop);
+			PidARMBottom->setPoint = EncARMBottom->adjustedValue;
+			PidARMTop->setPoint = EncARMTop->adjustedValue;
+		}
+//		if(joystickGetDigital(1, 8, JOY_UP)) {
+//			autonomous();
+//		}
 		delay(20);
 	}
 }
